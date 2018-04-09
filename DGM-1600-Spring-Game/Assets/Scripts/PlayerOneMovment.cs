@@ -32,16 +32,16 @@ public class PlayerOneMovment : MonoBehaviour {
         if (Input.GetKey(KeyCode.UpArrow))
         {
            
-            transform.Translate(Vector3.left * move * Time.deltaTime);
+            transform.Translate(Vector3.forward * move * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.DownArrow))
         {
 
-            transform.Translate(Vector3.right * move * Time.deltaTime);
+            transform.Translate(Vector3.back * move * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
-            transform.Rotate(0, -rotate * Time.deltaTime *10, 0);
+            transform.Rotate(0, -rotate * Time.deltaTime * 10, 0);
         //transform.rotation = Quaternion.Euler(0,-rotate * Time.deltaTime,0);
 
         }
