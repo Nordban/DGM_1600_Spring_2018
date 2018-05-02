@@ -31,7 +31,7 @@ public class Spwaning : MonoBehaviour {
         
         
         chickenCount = scoreManagerScript.maxChickens;
-        Debug.Log(chickenCount);
+        //Debug.Log(chickenCount);
         chicken = (GameObject)Resources.Load("Chicken", typeof(GameObject));
 
         chickenClone = Instantiate(chicken, spawnPoints[spawn].transform.position, Quaternion.identity);
@@ -59,7 +59,7 @@ public class Spwaning : MonoBehaviour {
                 cCount = targets.Length;
             int count = cCount - 1;
                 CountYourChickens(count);
-            Debug.Log(cCount);
+            //Debug.Log(cCount);
         }
             
 

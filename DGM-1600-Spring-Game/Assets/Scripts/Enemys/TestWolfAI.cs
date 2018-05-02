@@ -108,7 +108,7 @@ public class TestWolfAI : MonoBehaviour {
             //Attacking
             else if (lookDist <= alertDist)
             {
-                print("Wolf is following!");
+                //print("Wolf is following!");
                 direction = myTarget.transform.position - transform.position;
                 direction.y = 0;
 
@@ -129,7 +129,7 @@ public class TestWolfAI : MonoBehaviour {
 
                     if (direction.magnitude <= attackDist)
                     {
-                        print("wolf is attacking!");
+                        //print("wolf is attacking!");
                         state.SetBool("isFollowing", false);
                         state.SetBool("isAttacking", true);
                         state.SetBool("isWandering", false);
@@ -138,20 +138,23 @@ public class TestWolfAI : MonoBehaviour {
                         // wolf if attacking a chicken and gets the chickenhealth script and passes damage to it
                         if (myTarget.name == "Chicken(Clone)")
                         {
-                            chickenHealth = myTarget.GetComponent<ChickenHealth>();
-                            var health = hit.GetComponent<ChickenHealth>();
-                            if (health != null )
-                            {
-                                
-                                StartCoroutine("AttackTimer");
+                            
+                                chickenHealth = myTarget.GetComponent<ChickenHealth>();
+                                var health = hit.GetComponent<ChickenHealth>();
+                                if (health != null)
+                                {
 
-                            }
-                            else
-                            {
-                                StopCoroutine("AttackTimer");
-                                attackTimer = 0;
-                                chickenHealth = null;
-                            }
+                                    StartCoroutine("AttackTimer");
+
+                                }
+                                else
+                                {
+                                    StopCoroutine("AttackTimer");
+                                    attackTimer = 0;
+                                    chickenHealth = null;
+                                }
+                            
+                           
                         }
                         // wolf is attacking player and gets the PlayerHealth script and passes damage through it
                         else if( myTarget.name == "Farmer" )

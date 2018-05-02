@@ -47,16 +47,22 @@ public class ChickenHealth : MonoBehaviour {
     // keep track of the damage done to chicken. once health gets to 0 or below destroy the chicken
     public void TakeDamage(int damageAmount)
     {
-    
-        chickenHealth -= damageAmount;
-        if (chickenHealth <= 0 && gameObject != null)
+        
+            chickenHealth -= damageAmount;
+        if (chickenHealth <= 0)
         {
-           
+
             //Debug.Log(deadChicken);
-            Destroy(gameObject);
             chickenHealth = 0;
+
+            Destroy(gameObject);
             
+
+
+
+
         }
+       
     }
     // when this chicken is destroyed assign dead chicken a value of one and pass it to the destroying wolf's killed chicken count
     // at least that is what was supposed to happen. but it didn't so i am comenting it out till i can work it out

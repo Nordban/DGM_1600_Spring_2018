@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+
 
 public class Buttons : MonoBehaviour {
 
@@ -31,7 +32,7 @@ public class Buttons : MonoBehaviour {
 	}
     void Begin()
     {
-        EditorSceneManager.LoadSceneAsync(1);
+        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
     }
 
     void Options()

@@ -16,6 +16,7 @@ public class WareWolfHealth : MonoBehaviour {
     {
         currentHealth = maxHealth;
         dead = 1;
+        points = 200;
     }
 
     public void TakeDamage(int amount)
