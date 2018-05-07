@@ -4,16 +4,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 public class SceneManager : MonoBehaviour {
 
-
-
-	// Use this for initialization
-	void Start () {
-        
-	}
-
+    // load the level 
     public void LoadScene(int lvl)
     {
-        
+        // load the level of the corresponding number, number references the scenes in build number
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(lvl);
     }
 }

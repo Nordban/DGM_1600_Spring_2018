@@ -20,6 +20,7 @@ public class InGameButtons : MonoBehaviour {
         Button wPlayAgain = wStart.GetComponent<Button>();
         Button wBack = wMainMenu.GetComponent<Button>();
        
+        // add onClick listeners for each of the buttons
         lPlayAgain.onClick.AddListener(Begin);       
         lBack.onClick.AddListener(MainMenu);
         wPlayAgain.onClick.AddListener(Begin);
@@ -30,11 +31,13 @@ public class InGameButtons : MonoBehaviour {
    
     void Begin()
     {
+        // load the game
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(1);
     }
 
     void MainMenu()
     {
+        // load the main menu
         UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(0);
     }
 }

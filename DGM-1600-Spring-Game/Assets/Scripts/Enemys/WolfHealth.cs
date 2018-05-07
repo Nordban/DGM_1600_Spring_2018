@@ -23,6 +23,7 @@ public class WolfHealth : MonoBehaviour {
 	
 	public void TakeDamage(int amount)
     {
+        // damage wolf
         currentHealth -= amount;
 
         if(currentHealth <= 0)

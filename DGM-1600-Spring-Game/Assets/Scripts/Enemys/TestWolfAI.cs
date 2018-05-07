@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class TestWolfAI : MonoBehaviour {
     // Public 
-   // public Transform player;
+    public ChickenHealth chickenHealth;
+    public PlayerHealth playerHealth;
+    public GameObject myTarget;
+    public int killedChickens;
+    public GameObject warewolfPrefab;     
     public float speed;
     public int damage;
+    public int deltDamage = 10;
+
     // Wander 
     public float wanderRadius;
     public float wanderTimer;
     //Detection 
     public float alertDist;
     public float attackDist;
+
     // Private 
     private Animator state;
     private Vector3 direction;
@@ -20,32 +27,27 @@ public class TestWolfAI : MonoBehaviour {
     private UnityEngine.AI.NavMeshAgent agent;
     private float timer;
     private float distance;
-    private float attackTimer;
-    
-
-
-
-    public int deltDamage = 10;
-    private float lookDist;
-    public ChickenHealth chickenHealth;
-    public PlayerHealth playerHealth;
-    public GameObject myTarget;
-    public int killedChickens;
-    public GameObject warewolfPrefab;
+    private float attackTimer;   
+    private float lookDist;   
     private GameObject warewolf;
 
 
 
     void OnEnable()
     {
+        // get the navmesh agent component 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+        // set the timer to wanderTimer
         timer = wanderTimer;
-        attackTimer = 1f;
+        // set attack timer to 0
+        attackTimer = 0f;
     }
     // Use this for initialization
     void Start()
     {
+        // get the wolf animatior component 
         state = GetComponent<Animator>();
+        // get the player health script
         playerHealth = Object.FindObjectOfType<PlayerHealth>();
        
         
@@ -77,11 +79,6 @@ public class TestWolfAI : MonoBehaviour {
                     lookDist = distance;
                     myTarget = enemy;
 
-                    //if (myTarget.name == "Chicken(Clone")
-                    //{
-                    //    Debug.Log("got the nearest chicken's health script");
-                    //    chickenHealth = myTarget.GetComponent<ChickenHealth>();
-                    //}
                     
                 }
                 // log current target **for testing only**
@@ -98,61 +95,73 @@ public class TestWolfAI : MonoBehaviour {
             if (lookDist < alertDist && lookDist > attackDist)
             {
                 //print("Wolf sees player");
+                // change the wolf's state to following
                 state.SetBool("isFollowing", true);
                 state.SetBool("isWandering", false);
                 state.SetBool("isAttacking", false);
+                // increase the wolf's speed
                 speed = speed + 2;
+                // make the wolf look at the target transform
                 transform.LookAt(myTarget.transform);
+                // move the wolf towards the target
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
             //Attacking
-            else if (lookDist <= alertDist)
+            else if (lookDist <= attackDist)
             {
                 //print("Wolf is following!");
+                // set the direction of the wolf to where the target transform is
                 direction = myTarget.transform.position - transform.position;
                 direction.y = 0;
 
               
 
-
+                // change the wolf's state to attacking
                 state.SetBool("isFollowing", false);
                 state.SetBool("isAttacking", true);
                 state.SetBool("isWandering", false);
-
+                // reduce the speed to keep wolf from running into the game objects it is attacking
                 speed = speed - 10;
+                // prevent wolf speed from going too far negitive
                 if (speed < -20)
                 {
                     speed = 0;
 
                     transform.LookAt(myTarget.transform);
                     transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
+                    // if the wolf is close enougn to attack
                     if (direction.magnitude <= attackDist)
                     {
                         //print("wolf is attacking!");
                         state.SetBool("isFollowing", false);
                         state.SetBool("isAttacking", true);
                         state.SetBool("isWandering", false);
+                        // get the game object from myTarget and assign it to the variable hit
                         var hit = myTarget.gameObject;
 
                         // wolf if attacking a chicken and gets the chickenhealth script and passes damage to it
                         if (myTarget.name == "Chicken(Clone)")
                         {
-                            
-                                chickenHealth = myTarget.GetComponent<ChickenHealth>();
-                                var health = hit.GetComponent<ChickenHealth>();
-                                if (health != null)
-                                {
+                            // get the chicken health script for the current target
+                            chickenHealth = myTarget.GetComponent<ChickenHealth>();
+                            // 
+                            var health = hit.GetComponent<ChickenHealth>();
+                            // if the chicken has health
+                            if (health != null)
+                            {
+                                // start attack timer
+                                StartCoroutine("AttackTimer");
 
-                                    StartCoroutine("AttackTimer");
-
-                                }
-                                else
-                                {
-                                    StopCoroutine("AttackTimer");
-                                    attackTimer = 0;
-                                    chickenHealth = null;
-                                }
+                            }
+                            else
+                            {
+                                // stop the attack timer cause the chicken is dead
+                                StopCoroutine("AttackTimer");
+                                // set the attack timer to 0
+                                attackTimer = 0;
+                                // set chickenHealth to null
+                                chickenHealth = null;
+                            }
                             
                            
                         }
@@ -160,18 +169,20 @@ public class TestWolfAI : MonoBehaviour {
                         else if( myTarget.name == "Farmer" )
                         {
                             
-                            
+                            // get the player health script
                             playerHealth = hit.GetComponent<PlayerHealth>();
-                            attackTimer -= Time.deltaTime;
-                            //Debug.Log(attackTimer);
+                           
+                            // if the player still has health and the would is closer or equal to the attack distance start the attack timer
                             if (playerHealth != null && direction.magnitude <= attackDist)
                             {
+                                // start the attack timer
                                 StartCoroutine("AttackTimer");
                                 
 
                             }
                             else 
                             {
+                                // stop the attack timer and set timer to = 0
                                 StopCoroutine("AttackTimer");
                                 attackTimer = 0;
                                 playerHealth = null;
@@ -184,18 +195,22 @@ public class TestWolfAI : MonoBehaviour {
             }
             else
             {
+                // set target to null
                  myTarget = null;
+
                 //Wandering
                 if (myTarget == null)
                 {
+                    // increase the timer
                     timer += Time.deltaTime;
-
+                    // change the wolf's state to wandering
                     state.SetBool("isFollowing", false);
                     state.SetBool("isAttacking", false);
                     state.SetBool("isWandering", true);
 
                     if (timer >= wanderTimer)
                     {
+                        // make the wolf wander
                         Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
                         agent.SetDestination(newPos);
                         timer = 0;
@@ -215,7 +230,7 @@ public class TestWolfAI : MonoBehaviour {
     }
 
 
-
+    // set the would to a random direction 
     public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
     {
         Vector3 randDirection = Random.insideUnitSphere * dist;
@@ -246,35 +261,42 @@ public class TestWolfAI : MonoBehaviour {
     //    }
     //}
 
-
+        // attack timer
     IEnumerator AttackTimer()
     {
+        // as long as the timer is not 0
         while (timer != 0)
         {
-
+            // as long as the attack timer is <= 0 
             while (attackTimer <= 0)
             {
+                // if mytarget isn't null and it's name is "Farmer"
                 if (myTarget != null && myTarget.name == "Farmer")
                 {
+                    // pass damage to the playerHealth script
                     playerHealth.TakeDamage(damage);
                 }
+                // if myTarget isn't null and it's name is "Chicken(Clone)"
                 else if (myTarget != null && myTarget.name == "Chicken(Clone)")
                 {
+                    // Pass damage to the chickenHealth script
                     chickenHealth.TakeDamage(damage);
                 }
                 else
                 {
+                    // just in case
                     myTarget = null;
                 }
-                
+                // reset timer
                 attackTimer = 1f;
-                //Debug.Log("reset timer");
+                
             }
 
+            // decrease timer amount
             attackTimer -= Time.deltaTime;
 
 
-
+            // wait till the timer reaches 0
             yield return new WaitForSeconds(attackTimer);
 
 

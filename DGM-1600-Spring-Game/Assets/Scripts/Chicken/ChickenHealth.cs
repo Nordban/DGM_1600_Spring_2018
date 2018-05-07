@@ -18,43 +18,23 @@ public class ChickenHealth : MonoBehaviour {
     {   
         // set the chickens health
         chickenHealth = 30;
-        //deadChicken = 1;
-        //wolf = GameObject.FindGameObjectWithTag("Enemy");
-       
 
-        //attempting to get the wolf object so i can pass a value to the chickensKilled function
-       //wolfAiScript = Object.FindObjectOfType<TestWolfAI>();
         
     }
-
-    //private void Update()
-    //{
-    //    if (wolf != null)
-    //    {
-    //        // get the gameobject that has entered the chickens alert zone and assign it to the wolf variable
-    //        wolf = GetComponent<ChickenAI>().enemy;
-
-    //        // get the updatedWolfNavMeshAI script from the target in order to pass the deadChicken value to the correct wolf if the chicken dies.
-           
-    //    }
-    //    else
-    //    {
-    //        wolf = null;
-    //    }
-        
-       
-    //}
+    
     // keep track of the damage done to chicken. once health gets to 0 or below destroy the chicken
     public void TakeDamage(int damageAmount)
     {
-        
-            chickenHealth -= damageAmount;
+        // take damage from the chicken's health
+        chickenHealth -= damageAmount;
+        // if the chicken has <=0 health
         if (chickenHealth <= 0)
         {
 
             //Debug.Log(deadChicken);
+            // set the chicken's health to 0
             chickenHealth = 0;
-
+            // destroy the chicken
             Destroy(gameObject);
             
 

@@ -18,9 +18,11 @@ public class Shoot : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        
+        // set the text for bullet count to the max bullet amount
         bulletCount.text = maxBullets.ToString();
+        // hide the reload panel
         reloadPanel.SetActive(false);
+        // assign the bullets variable the maxBullet amount
         bullets = maxBullets;
     }
 
@@ -60,8 +62,8 @@ public class Shoot : MonoBehaviour {
     //reload the gun when the player enters the barn sphere collider
     private void OnTriggerStay(Collider other)
     {
-        //test if the collider belongs to the barn and bullets is < 14
-        if (other.gameObject.name == "Barn" && bullets <=14)
+        //test if the collider belongs to the barn and bullets is < maxBullets
+        if (other.gameObject.name == "Barn" && bullets <= maxBullets)
         {
            // reset bullets to max
             bullets = maxBullets;
